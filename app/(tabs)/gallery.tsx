@@ -5,7 +5,7 @@ import { i18n } from '@/i18n/gallery.i18n';
 import { loadBeModel, runBeModel } from '@/utils/model';
 import * as ort from 'onnxruntime-react-native';
 
-export default function ImagePickerExample() {
+export default function Gallery() {
   const [image, setImage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [model, setModel] = useState<ort.InferenceSession | undefined>();
