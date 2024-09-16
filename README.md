@@ -56,3 +56,22 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+ 
+ ## Add onnxruntime-react-native
+ Library onnxruntime-react-native is not designed for expo, as it uses some native code. To add and use it:
+ 1 ```expo install onnxruntime-react-native```
+ 2 Put the model file under <SOURCE_ROOT>/assets
+ 3 add a new file metro.config.js (as in this project):
+ ```
+   const { getDefaultConfig } = require('@expo/metro-config');
+   const defaultConfig = getDefaultConfig(__dirname);
+   defaultConfig.resolver.assetExts.push('ort');
+   module.exports = defaultConfig;
+ ```
+ 4 In <SOURCE_ROOT>/app.json, add the following line to section expo:
+ ```"plugins": ["onnxruntime-react-native"],```
+ 5 npx expo prebuild
+ 6 check or add this line in <SOURCE_ROOT>/ios/Podfile, add the following line to section target 'be-ai-app':
+ ```pod 'onnxruntime-react-native', :path => '../node_modules/onnxruntime-react-native'```
+ 7 cd ios && pod install
+ 
