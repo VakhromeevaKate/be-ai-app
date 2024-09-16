@@ -1,0 +1,116 @@
+{
+    "common": {
+        "sex": {
+            "question": {
+                "ru": "Укажите Ваш пол",
+                "en": "Your sex"
+            },
+            "answer": {
+                "type": "select",
+                "variants": [
+                    {
+                        "ru": "мужской",
+                        "en": "male"
+                    }, {
+                        "ru": "женский",
+                        "en": "female"
+                    }
+                ]
+            }
+        },
+        "age": {
+            "question": {
+                "ru": "Укажите Ваш возраст",
+                "en": "Your age"
+            },
+            "answer": {
+                "type": "number",
+                "default": 0
+            }
+        },
+        "height": {
+            "question": {
+                "ru": "Укажите Ваш рост в см",
+                "en": "Your height in santimeters"
+            },
+            "answer": {
+                "type": "number",
+                "default": 0
+            }
+        },
+        "weight": {
+            "question": {
+                "ru": "Укажите Ваш текущий вес в кг",
+                "en": "Your weight in kilos"
+            },
+            "answer": {
+                "type": "number",
+                "default": 0
+            }
+        },
+        "desiredWeight": {
+            "question": {
+                "ru": "Укажите желаемый вес в кг",
+                "en": "Your desired weight in kilos"
+            },
+            "answer": {
+                "type": "number",
+                "default": 0
+            }
+        },
+        "diseases": {
+            "question": {
+                "ru": "Имеются ли у Вас какие-либо заболевания?",
+                "en": "Do you have any diseases?"
+            },
+            "answer": {
+                "type": "select",
+                "variants": [
+                    {
+                        "ru": "сахарный диабет",
+                        "en": "diabetes mellitus"
+                    },
+                    {
+                        "ru": "атеросклероз",
+                        "en": "atherosclerosis"
+                    },
+                    {
+                        "ru": "синдром поликистозных яичников",
+                        "en": "polycystic ovary syndrome"
+                    },
+                    {
+                        "ru": "тиреоидит",
+                        "en": "thyroid disease"
+                    },
+                    {
+                        "ru": "непереносимость глютена",
+                        "en": "gluten intolerance"
+                    },
+                    {
+                        "ru": "другие заболевания",
+                        "en": "other diseases"
+                    }
+                ]
+            }
+        },
+        "medications": {
+            "question": {
+                "ru": "Принимаете ли Вы какие-либо лекарства?",
+                "en": "Are you taking any medications?"
+            },
+            "answer": {
+                "type": "select",
+                "variants": [
+                    {
+                        "ru": "да",
+                        "en": "yes" 
+                    },
+                    {
+                        "ru": "нет",
+                        "en": "no" 
+                    }
+                ]
+            }
+        }
+    }
+}

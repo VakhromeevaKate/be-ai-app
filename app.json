@@ -13,7 +13,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.vakhromeevae.be-ai-app"
     },
     "android": {
       "adaptiveIcon": {
@@ -27,7 +28,12 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-camera",
+      "expo-image-picker",
+      "onnxruntime-react-native",
+      "expo-asset",
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true
