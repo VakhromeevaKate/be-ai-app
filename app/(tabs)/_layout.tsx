@@ -26,20 +26,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="camera"
-        options={{
-          title: i18n.t('camera'),
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'camera' : 'camera-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="gallery"
         options={{
           title: i18n.t('gallery'),
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'image' : 'image-outline'} color={color} />
+            <TabBarIcon name={focused ? 'camera' : 'camera-outline'} color={color} />
           ),
         }}
       />
