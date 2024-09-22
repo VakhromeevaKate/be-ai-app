@@ -4,12 +4,12 @@ import { I18n } from 'i18n-js';
 const i18n = new I18n({
     en: {
         diary: "Diary",
-        takePhoto: "Сделать фото",
+        takePhoto: "Take photo",
         profile: "Profile"
     },
     ru: {
         diary: "Дневник",
-        takePhoto: "Take photo",
+        takePhoto: "Сделать фото",
         profile: "Профиль"
     },
   });
