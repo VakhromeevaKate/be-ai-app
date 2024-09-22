@@ -4,7 +4,9 @@ import * as ImagePicker from 'expo-image-picker';
 import { i18n } from '@/i18n/gallery.i18n';
 import { loadBeModel, runBeModel } from '@/utils/model';
 import * as ort from 'onnxruntime-react-native';
-import { Colors } from '@/constants/Colors';
+import { Colors, tintColorBeDark, kDarkGreen } from '@/constants/Colors';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
 
 export default function Gallery() {
   const [image, setImage] = useState<string | null>(null);
@@ -73,29 +75,33 @@ export default function Gallery() {
 
   const renderContent = () => (
     <>
-      {!image && <Pressable style={styles.button} onPress={pickImage}>
-          <Text>{i18n.t('pickAnImage')}</Text>
+      {!image && <ThemedView style={styles.viewContainer}>
+        <Pressable style={styles.commonButton} onPress={pickImage}>
+          <ThemedText style={styles.buttonText}>{i18n.t('pickAnImage')}</ThemedText>
         </Pressable>
-      }
-      {!image && 
-        <Pressable style={styles.button} onPress={takePhoto}>
-          <Text>{i18n.t('takePhoto')}</Text>
-        </Pressable>}
-      {image && <Image source={{ uri: image }} style={styles.image} />}
+        <Pressable style={styles.commonButton} onPress={takePhoto}>
+          <ThemedText style={styles.buttonText}>{i18n.t('takePhoto')}</ThemedText>
+        </Pressable>
+      </ThemedView>}
       {image &&
-        <Pressable style={styles.button} onPress={inferenceModel}>
-          <Text>{i18n.t('recognizeImage')}</Text>
+        <ThemedView style={styles.viewContainer}>
+          <Image source={{ uri: image }} style={styles.image} />
+        </ThemedView>
+      }
+      {image && <ThemedView style={styles.viewContainer}>
+        <Pressable style={styles.primaryButton} onPress={inferenceModel}>
+          <ThemedText style={styles.buttonText}>{i18n.t('recognizeImage')}</ThemedText>
         </Pressable>
-      }
-      {image && <Pressable style={styles.button} onPress={cancel}>
-          <Text>{i18n.t('cancel')}</Text>
+        <Pressable style={styles.cancelButton} onPress={cancel}>
+          <ThemedText style={styles.buttonText}>{i18n.t('cancel')}</ThemedText>
         </Pressable>
-      }
-      {image && modelResult && <Pressable style={styles.button} onPress={saveMeal}>
-          <Text>{i18n.t('saveMeal')}</Text>
-      </Pressable>
-      }
-      {modelResult && <Text>{modelResult.dims}</Text>}
+        {modelResult && <Pressable style={styles.commonButton} onPress={saveMeal}>
+          <ThemedText style={styles.buttonText}>{i18n.t('saveMeal')}</ThemedText>
+        </Pressable>}
+      </ThemedView>}
+      <ThemedView>
+        {modelResult && <ThemedText>{modelResult.dims}</ThemedText>}
+      </ThemedView>
     </>
   );
 
@@ -112,19 +118,49 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    marginVertical: 20,
+  },
+  viewContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
   image: {
     width: 200,
     height: 200,
   },
-  button: {
-    display: "flex",
+  commonButton: {
     flexDirection: "row",
-    justifyContent: "center",
-    backgroundColor: Colors.light.tabIconDefault,
-    color: Colors.dark.text,
-    width: "80%",
+    width: '80%',
+    justifyContent: 'center',
     margin: 20,
-    padding: 12
+    padding: 12,
+    borderRadius: 40,
+    backgroundColor: Colors.light.tabIconDefault,
+  },
+  cancelButton: {
+    flexDirection: "row",
+    width: '80%',
+    justifyContent: 'center',
+    margin: 20,
+    padding: 12,
+    borderRadius: 40,
+    backgroundColor: Colors.light.tabIconDefault,
+  },
+  primaryButton: {
+    flexDirection: "row",
+    width: '80%',
+    justifyContent: 'center',
+    margin: 20,
+    padding: 12,
+    borderRadius: 40,
+    backgroundColor: kDarkGreen,
+  },
+  buttonText: {
+    color: tintColorBeDark,
+    fontSize: 20,
+    fontWeight: 600,
   }
 });

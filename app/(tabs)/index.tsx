@@ -1,4 +1,4 @@
-import { Button, Dimensions, Image, StyleSheet } from 'react-native';
+import { Pressable, Dimensions, Image, StyleSheet } from 'react-native';
 import { i18n } from '@/i18n/homeScreen.i18n';
 import { BarChart, PieChart } from 'react-native-chart-kit';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -59,7 +59,7 @@ export default function HomeScreen() {
       <ThemedView style={styles.titleContainer}>
         <ThemedText style={styles.title} type="title">{i18n.t("welcome")}</ThemedText>
       </ThemedView>
-      <ThemedView>
+      <ThemedView style={styles.titleContainer}>
       <PieChart
         data={mealData}
         width={screenWidth}
@@ -76,7 +76,7 @@ export default function HomeScreen() {
       <BarChart
         style={styles.barGraphStyle}
         data={waterGlassesData}
-        width={screenWidth - 20}
+        width={screenWidth - 30}
         height={220}
         yAxisLabel=""
         yAxisSuffix={` ${i18n.t('cup')}`}
@@ -84,10 +84,12 @@ export default function HomeScreen() {
         verticalLabelRotation={0}
         />
       </ThemedView>
-      <ThemedView>
-        <Button
-          title={i18n.t('addMeal')}
-        />
+      <ThemedView style={styles.titleContainer}>
+        <Pressable style={styles.button}>
+          <ThemedText>
+            {i18n.t('addMeal')}
+          </ThemedText>
+        </Pressable>
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -97,6 +99,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 8,
   },
   title: {
@@ -126,9 +129,17 @@ const styles = StyleSheet.create({
   barGraphStyle: {
     maxWidth: "80%",
     maxHeight: 200,
-    margin: 20,
+    marginVertical: 20,
   },
   button: {
-    backgroundColor: kGreen
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    backgroundColor: Colors.light.tabIconDefault,
+    color: Colors.dark.text,
+    width: "80%",
+    margin: 20,
+    padding: 12,
+    borderRadius: 40
   }
 });
