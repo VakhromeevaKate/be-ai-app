@@ -1,6 +1,7 @@
 import { Asset } from 'expo-asset';
 import * as ort from 'onnxruntime-react-native';
 import { InferenceSession } from "onnxruntime-react-native";
+import { imageToFloatTensor } from './onnx';
 
 export async function loadModel() {
     let myModel: InferenceSession;
@@ -76,6 +77,26 @@ export async function runBeModel(myModel: InferenceSession): Promise<ort.Tensor 
         console.log(
             'Be model inference successfully' //, `output shape: ${output.dims}, output data: ${output.data}`
             );
+        }
+        return output;
+    } catch (e) {
+        console.log('failed to inference model', `${e}`);
+        throw e;
+    }
+}
+
+export async function runBeYoloModel(myModel: InferenceSession, imagePath: string): Promise<ort.Tensor | undefined> {
+    try {
+        const inputData = await imageToFloatTensor(imagePath);
+        const feeds:Record<string, ort.Tensor> = {};
+        feeds[myModel.inputNames[0]] = new ort.Tensor(inputData, [1, 3, 640, 640]);
+
+        const fetches = await myModel.run(feeds);
+        const output = fetches[myModel.outputNames[0]];
+        if (!output) {
+            console.log('failed to get output', `${myModel.outputNames[0]}`);
+        } else {
+            console.log('Be model inference successfully', `output shape: ${output.dims}, output data: ${output.data}`);
         }
         return output;
     } catch (e) {

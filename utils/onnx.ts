@@ -16,36 +16,39 @@ export const startONNXSession = async(session: InferenceSession, input: any) => 
     return result;
 }
 
-export const imageToFloatTensor = async(imageUri: string): Promise<Float32Array> => {
-    const tensorData = new Float32Array(3 * 512 * 512);
+export const imageToFloatTensor = async(imageUri: string, width: number = 640, height: number = 640): Promise<Float32Array> => {
+    const tensorData = new Float32Array(3 * width * height);
+    console.log('tensorData', 3 * width * height);
     // Шаг 1: Загрузить изображение
     const imageAsset = await FileSystem.readAsStringAsync(imageUri, {
         encoding: FileSystem.EncodingType.Base64,
     });
 
     const jpegData = decodeImage(imageAsset);
+    console.log({jpegData});
 
-    // Шаг 2: Изменить размер до 512x512
+    // Шаг 2: Изменить размер до заданного
     const resizedImage = await ImageManipulator.manipulateAsync(
         imageUri,
-        [{ resize: { width: 512, height: 512 } }],
+        [{ resize: { width, height } }],
         { base64: true }
     );
+    console.log({imageHeight: resizedImage.height, imageWidth: resizedImage.width});
     if (resizedImage && resizedImage.base64) {
         // Декодируем измененное изображение
         const resizedImageData = decodeImage(resizedImage.base64);
             
         // Шаг 3: Нормализуем пиксели и создаем тензор
-        for (let i = 0; i < 512; i++) {
-            for (let j = 0; j < 512; j++) {
-                const index = (i * 512 + j) * 4; // 4 - это RGBA
+        for (let i = 0; i < width; i++) {
+            for (let j = 0; j < height; j++) {
+                const index = (i * width + j) * 4; // 4 - это RGBA
                 // Получаем значения R, G, B
                 // @ts-ignore
-                tensorData[0 * 512 * 512 + i * 512 + j] = resizedImageData[index] / 255; //  R
+                tensorData[0 * width * height + i * width + j] = resizedImageData[index] / 255; // R
                 // @ts-ignore
-                tensorData[1 * 512 * 512 + i * 512 + j] = resizedImageData[index + 1] / 255; // G
+                tensorData[1 * width * height + i * width + j] = resizedImageData[index + 1] / 255; // G
                 // @ts-ignore
-                tensorData[2 * 512 * 512 + i * 512 + j] = resizedImageData[index + 2] / 255; // B
+                tensorData[2 * width * height + i * width + j] = resizedImageData[index + 2] / 255; // B
             }
         }
     }
