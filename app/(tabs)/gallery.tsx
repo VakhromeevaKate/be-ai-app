@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Pressable, Image, View, StyleSheet, ActivityIndicator, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { i18n } from '@/i18n/gallery.i18n';
-import { loadBeModel, runBeModel } from '@/utils/model';
+import { loadBeModel, runBeYoloModel } from '@/utils/model';
 import * as ort from 'onnxruntime-react-native';
 import { Colors, tintColorBeDark, kDarkGreen } from '@/constants/Colors';
 import { ThemedText } from '@/components/ThemedText';
@@ -64,7 +64,7 @@ export default function Gallery() {
     try {
       setLoading(true);
       if (!model) return;
-      const result = await runBeModel(model);
+      const result = await runBeYoloModel(model, image || '');
       setModelResult(result);
     } catch (error) {
       console.log(error);
