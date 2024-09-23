@@ -17,8 +17,8 @@ export const startONNXSession = async(session: InferenceSession, input: any) => 
 }
 
 export const imageToFloatTensor = async(imageUri: string, width: number = 640, height: number = 640): Promise<Float32Array> => {
-    const tensorData = new Float32Array(3 * width * height);
-    console.log('tensorData', 3 * width * height);
+    const tensorData = new Float32Array(3 * height * width);
+    console.log('tensorData', 3 * height * width);
     // Шаг 1: Загрузить изображение
     const imageAsset = await FileSystem.readAsStringAsync(imageUri, {
         encoding: FileSystem.EncodingType.Base64,
@@ -39,16 +39,16 @@ export const imageToFloatTensor = async(imageUri: string, width: number = 640, h
         const resizedImageData = decodeImage(resizedImage.base64);
             
         // Шаг 3: Нормализуем пиксели и создаем тензор
-        for (let i = 0; i < width; i++) {
-            for (let j = 0; j < height; j++) {
+        for (let i = 0; i < height; i++) {
+            for (let j = 0; j < width; j++) {
                 const index = (i * width + j) * 4; // 4 - это RGBA
                 // Получаем значения R, G, B
                 // @ts-ignore
-                tensorData[0 * width * height + i * width + j] = resizedImageData[index] / 255; // R
+                tensorData[0 * height * width + i * width + j] = resizedImageData[index] / 255; // R
                 // @ts-ignore
-                tensorData[1 * width * height + i * width + j] = resizedImageData[index + 1] / 255; // G
+                tensorData[1 * height * width + i * width + j] = resizedImageData[index + 1] / 255; // G
                 // @ts-ignore
-                tensorData[2 * width * height + i * width + j] = resizedImageData[index + 2] / 255; // B
+                tensorData[2 * height * width + i * width + j] = resizedImageData[index + 2] / 255; // B
             }
         }
     }

@@ -85,7 +85,7 @@ export async function runBeModel(myModel: InferenceSession): Promise<ort.Tensor 
     }
 }
 
-export async function runBeYoloModel(myModel: InferenceSession, imagePath: string): Promise<ort.Tensor | undefined> {
+export async function runBeYoloModel(myModel: InferenceSession, imagePath: string): Promise<InferenceSession.OnnxValueMapType | undefined> {
     try {
         const inputData = await imageToFloatTensor(imagePath);
         const feeds:Record<string, ort.Tensor> = {};
@@ -93,15 +93,17 @@ export async function runBeYoloModel(myModel: InferenceSession, imagePath: strin
 
         const fetches = await myModel.run(feeds);
         const output = fetches[myModel.outputNames[0]];
+        const outputTensor = fetches.output
+        console.log({outputTensor})
         if (!output) {
             console.log('failed to get output', `${myModel.outputNames[0]}`);
         } else {
             console.log('Be model inference successfully', `output shape: ${output.dims}`); //, output data: ${output.data}`);
             console.log(Object.keys(fetches))
-            const output1 = fetches[myModel.outputNames[1]];
-            console.log(output1.data); // Тут везде NaN почему-то в дате, надо понять, что не так
+            // const output1 = fetches[myModel.outputNames[1]];
+            // console.log(output1.data); // Тут везде NaN почему-то в дате, надо понять, что не так
         }
-        return output;
+        return fetches;
     } catch (e) {
         console.log('failed to inference model', `${e}`);
         throw e;
