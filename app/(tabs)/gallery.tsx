@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Pressable, Image, View, StyleSheet, ActivityIndicator, Text } from 'react-native';
+import { Pressable, Image, View, StyleSheet, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { i18n } from '@/i18n/gallery.i18n';
 import { loadBeModel, runBeYoloModel } from '@/utils/model';
 import * as ort from 'onnxruntime-react-native';
+import { InferenceSession } from 'onnxruntime-react-native';
 import { Colors, tintColorBeDark, kDarkGreen } from '@/constants/Colors';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -12,7 +13,7 @@ export default function Gallery() {
   const [image, setImage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [model, setModel] = useState<ort.InferenceSession | undefined>();
-  const [modelResult, setModelResult] = useState<ort.Tensor | undefined>()
+  const [modelResult, setModelResult] = useState<InferenceSession.OnnxValueMapType | undefined>()
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -100,7 +101,11 @@ export default function Gallery() {
         </Pressable>}
       </ThemedView>}
       <ThemedView>
-        {modelResult && <ThemedText>{modelResult.dims}</ThemedText>}
+        {modelResult && <ThemedText>output0.dims: {modelResult.output0.dims}</ThemedText>}
+        {modelResult && <ThemedText>output0.size: {modelResult.output0.size}</ThemedText>}
+        {modelResult && <ThemedText>output1.dims: {modelResult.output1.dims}</ThemedText>}
+        {modelResult && <ThemedText>output1.size: {modelResult.output1.size}</ThemedText>}
+        {modelResult && <ThemedText>output0: {modelResult.output0.location}</ThemedText>}
       </ThemedView>
     </>
   );
