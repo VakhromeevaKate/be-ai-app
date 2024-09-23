@@ -96,7 +96,10 @@ export async function runBeYoloModel(myModel: InferenceSession, imagePath: strin
         if (!output) {
             console.log('failed to get output', `${myModel.outputNames[0]}`);
         } else {
-            console.log('Be model inference successfully', `output shape: ${output.dims}, output data: ${output.data}`);
+            console.log('Be model inference successfully', `output shape: ${output.dims}`); //, output data: ${output.data}`);
+            console.log(Object.keys(fetches))
+            const output1 = fetches[myModel.outputNames[1]];
+            console.log(output1.data); // Тут везде NaN почему-то в дате, надо понять, что не так
         }
         return output;
     } catch (e) {
