@@ -101,11 +101,11 @@ export default function Gallery() {
         </Pressable>}
       </ThemedView>}
       <ThemedView>
-        {modelResult && <ThemedText>output0.dims: {modelResult.output0.dims}</ThemedText>}
-        {modelResult && <ThemedText>output0.size: {modelResult.output0.size}</ThemedText>}
-        {modelResult && <ThemedText>output1.dims: {modelResult.output1.dims}</ThemedText>}
-        {modelResult && <ThemedText>output1.size: {modelResult.output1.size}</ThemedText>}
-        {modelResult && <ThemedText>output0: {modelResult.output0.location}</ThemedText>}
+        {modelResult && <ThemedText>{i18n.t('Dairy')}: {0.0} %</ThemedText>}
+        {modelResult && <ThemedText>{i18n.t('Fruits')}: {0.0} %</ThemedText>}
+        {modelResult && <ThemedText>{i18n.t('Grains')}: {0.0} %</ThemedText>}
+        {modelResult && <ThemedText>{i18n.t('Protein')}: {0.0} %</ThemedText>}
+        {modelResult && <ThemedText>{i18n.t('Vegetables')}: {100.0}%</ThemedText>}
       </ThemedView>
     </ThemedView>
   );
