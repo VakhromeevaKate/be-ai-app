@@ -5,28 +5,28 @@ import { Colors } from "react-native/Libraries/NewAppScreen";
 export const mealData = [
     {
       name: i18n.t('carbohydrates'),
-      population: 100,
+      population: 5 * 4,
       color: GraphColors.light.carbohydrates,
       legendFontColor: GraphColors.light.legend,
       legendFontSize: 12
     },
     {
       name: i18n.t('fats'),
-      population: 50,
+      population: 0.1 * 4,
       color: GraphColors.light.fats,
       legendFontColor: GraphColors.light.legend,
       legendFontSize: 12
     },
     {
       name: i18n.t('proteins'),
-      population: 70,
+      population: 2.5 * 4,
       color: GraphColors.light.proteins,
       legendFontColor: GraphColors.light.legend,
       legendFontSize: 12
     },
     {
       name: i18n.t('fiber'),
-      population: 400,
+      population: 3 * 4,
       color: GraphColors.light.fiber,
       legendFontColor: GraphColors.light.legend,
       legendFontSize: 12
