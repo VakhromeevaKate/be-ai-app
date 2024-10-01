@@ -4,7 +4,7 @@ import { BarChart, PieChart } from 'react-native-chart-kit';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { Colors, kGreen } from '@/constants/Colors';
+import { Colors, kGreen, tintColorBeDark } from '@/constants/Colors';
 import { GraphColors } from '@/constants/GraphColors';
 import { mealData } from '@/dummies/pieChartData';
 import { waterGlassesData } from '@/dummies/barChartData';
@@ -51,13 +51,15 @@ export default function HomeScreen() {
     <ParallaxScrollView
       headerBackgroundColor={{ light: Colors.light.background, dark: Colors.dark.background }}
       headerImage={
-        <Image
-          source={require('@/assets/images/icon.png')}
-          style={styles.reactLogo}
-        />
+        <ThemedView style={styles.headerContainer}>
+          <Image
+            source={require('@/assets/images/icon.png')}
+            style={styles.reactLogo}
+          />
+        </ThemedView>
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText style={styles.title} type="title">{i18n.t("welcome")}</ThemedText>
+        <ThemedText style={styles.title} type="title">{i18n.t("today")}, {new Date().toDateString()}</ThemedText>
       </ThemedView>
       <ThemedView style={styles.titleContainer}>
       <PieChart
@@ -86,7 +88,7 @@ export default function HomeScreen() {
       </ThemedView>
       <ThemedView style={styles.titleContainer}>
         <Pressable style={styles.button}>
-          <ThemedText>
+          <ThemedText style={styles.buttonText}>
             {i18n.t('addMeal')}
           </ThemedText>
         </Pressable>
@@ -96,6 +98,12 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -103,7 +111,8 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   title: {
-    textAlign: "center",
+    fontFamily: 'cursive',
+    color: Colors.light.tabIconSelected,
   },
   stepContainer: {
     gap: 8,
@@ -141,5 +150,10 @@ const styles = StyleSheet.create({
     margin: 20,
     padding: 12,
     borderRadius: 40
+  },
+  buttonText: {
+    color: tintColorBeDark,
+    fontSize: 20,
+    fontWeight: 600,
   }
 });
