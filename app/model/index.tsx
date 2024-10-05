@@ -16,15 +16,13 @@ export default function ModelScreen() {
           const assets = await Asset.loadAsync(require('@/assets/models/mnist.ort'));
           const modelUri = assets[0].localUri;
           if (!modelUri) {
-            Alert.alert('failed to get model URI', `${assets[0]}`);
+            Alert.alert('Failed to get model URI', `${assets[0]}`);
           } else {
             myModel = await ort.InferenceSession.create(modelUri);
-            Alert.alert(
-              'model loaded successfully',
-              `input names: ${myModel.inputNames}, output names: ${myModel.outputNames}`);
+            Alert.alert('Success:', 'model loaded successfully')
           }
         } catch (e) {
-          Alert.alert('failed to load model', `${e}`);
+          Alert.alert('Failed to load model', `${e}`);
           throw e;
         }
       }
