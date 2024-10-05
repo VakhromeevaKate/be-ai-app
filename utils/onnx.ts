@@ -1,7 +1,9 @@
-import { InferenceSession, type Tensor } from "onnxruntime-react-native";
+import { InferenceSession } from "onnxruntime-react-native";
 import * as FileSystem from 'expo-file-system';
 import * as ort from 'onnxruntime-react-native';
 import * as ImageManipulator from 'expo-image-manipulator';
+import { decodeJpeg } from '@tensorflow/tfjs-react-native';
+import * as tf from "@tensorflow/tfjs";
 
 // load a model
 export const getONNXSession = async(modelPath: string) => {
@@ -55,6 +57,7 @@ export const imageToUin8Tensor = async (imageUri: string, width: number = 640, h
 };
 
 export const imageToFloatTensor = async(imageUri: string, width: number = 640, height: number = 640): Promise<Float32Array> => {
+    await tf.ready();
     // Шаг 1: Создаем тензор нужного размера
     const tensorData = new Float32Array(3 * height * width);
 
@@ -65,8 +68,6 @@ export const imageToFloatTensor = async(imageUri: string, width: number = 640, h
         { base64: true }
     );
 
-    console.log(`resizedImage, height: ${resizedImage.height} width: ${resizedImage.width}, base64Len: ${resizedImage.base64?.length}, length: ${640 * 640}`)
-
     // Шаг 3: Преобразуем base64 изображение в Uint8Array
     const base64Image = resizedImage.base64;
     const binaryString = atob(base64Image || '');
@@ -76,7 +77,10 @@ export const imageToFloatTensor = async(imageUri: string, width: number = 640, h
         bytes[i] = binaryString.charCodeAt(i);
     }
 
-    console.log(bytes.length, height * width);
+    const imageTensor = await decodeJpeg(bytes);
+    // console.log('imageTensor:', { shape: imageTensor.shape, dtype: imageTensor.dtype })
+    // imageTensor.print()
+    const bytesArr = imageTensor.dataSync();
 
     // Шаг 4: Нормализуем пиксели и создаем тензор
     for (let i = 0; i < height; i++) {
@@ -84,11 +88,11 @@ export const imageToFloatTensor = async(imageUri: string, width: number = 640, h
             const index = (i * width + j) * 4; // 4 - это RGBA
             // Получаем значения R, G, B
             // @ts-ignore
-            tensorData[0 * height * width + i * width + j] = (bytes[index] || 0) / 255; // R
+            tensorData[0 * height * width + i * width + j] = (bytesArr[index]) / 255; // R
             // @ts-ignore
-            tensorData[1 * height * width + i * width + j] = (bytes[index + 1] || 0) / 255; // G
+            tensorData[1 * height * width + i * width + j] = (bytesArr[index + 1]) / 255; // G
             // @ts-ignore
-            tensorData[2 * height * width + i * width + j] = (bytes[index + 2] || 0) / 255; // B
+            tensorData[2 * height * width + i * width + j] = (bytesArr[index + 2]) / 255; // B
         }
     }
 
