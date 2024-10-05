@@ -2,7 +2,6 @@ import { InferenceSession, type Tensor } from "onnxruntime-react-native";
 import * as FileSystem from 'expo-file-system';
 import * as ort from 'onnxruntime-react-native';
 import * as ImageManipulator from 'expo-image-manipulator';
-import { decode as decodeImage } from 'base64-arraybuffer';
 
 // load a model
 export const getONNXSession = async(modelPath: string) => {
@@ -16,46 +15,85 @@ export const startONNXSession = async(session: InferenceSession, input: any) => 
     return result;
 }
 
+export const imageToUin8Tensor = async (imageUri: string, width: number = 640, height: number = 640): Promise<Uint8Array> => {
+    try {
+        // Изменить размер до заданного
+        const resizedImage = await ImageManipulator.manipulateAsync(
+            imageUri,
+            [{ resize: { width, height } }],
+            { base64: true }
+        );
+
+        // Получаем итоговое изображение в формате base64
+        const base64Image = resizedImage.base64;
+
+        // Преобразуем base64 изображение в Uint8Array
+        const binaryString = atob(base64Image || '');
+        const len = binaryString.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+
+        const resultTensor = new Uint8Array(3 * height * width);
+        for (let i = 0; i < height; i++) {
+        for (let j = 0; j < width; j++) {
+            const index = (i * width + j) * 4; // 4 канала (RGBA)
+            const targetIndex = (i * width + j) * 3; // 3 канала (RGB)
+
+            resultTensor[targetIndex] = bytes[index];         // R
+            resultTensor[targetIndex + 1] = bytes[index + 1]; // G
+            resultTensor[targetIndex + 2] = bytes[index + 2]; // B
+        }
+    }
+
+    return resultTensor;
+    } catch (error) {
+        console.error("Error converting image:", error);
+        throw new Error("Image conversion failed.");
+    }
+};
+
 export const imageToFloatTensor = async(imageUri: string, width: number = 640, height: number = 640): Promise<Float32Array> => {
+    // Шаг 1: Создаем тензор нужного размера
     const tensorData = new Float32Array(3 * height * width);
-    console.log('tensorData', 3 * height * width);
-    // Шаг 1: Загрузить изображение
-    const imageAsset = await FileSystem.readAsStringAsync(imageUri, {
-        encoding: FileSystem.EncodingType.Base64,
-    });
 
-    const jpegData = decodeImage(imageAsset);
-    console.log({jpegData});
-
-    // Шаг 2: Изменить размер до заданного
+    // Шаг 2: Изменить размер изображения до заданного
     const resizedImage = await ImageManipulator.manipulateAsync(
         imageUri,
         [{ resize: { width, height } }],
         { base64: true }
     );
-    console.log({imageHeight: resizedImage.height, imageWidth: resizedImage.width});
-    if (resizedImage && resizedImage.base64) {
-        // Декодируем измененное изображение
-        const resizedImageData = decodeImage(resizedImage.base64);
-            
-        // Шаг 3: Нормализуем пиксели и создаем тензор
-        for (let i = 0; i < height; i++) {
-            for (let j = 0; j < width; j++) {
-                const index = (i * width + j) * 4; // 4 - это RGBA
-                // Получаем значения R, G, B
-                // @ts-ignore
-                tensorData[0 * height * width + i * width + j] = resizedImageData[index] / 255; // R
-                // @ts-ignore
-                tensorData[1 * height * width + i * width + j] = resizedImageData[index + 1] / 255; // G
-                // @ts-ignore
-                tensorData[2 * height * width + i * width + j] = resizedImageData[index + 2] / 255; // B
-            }
+
+    console.log(`resizedImage, height: ${resizedImage.height} width: ${resizedImage.width}, base64Len: ${resizedImage.base64?.length}, length: ${640 * 640}`)
+
+    // Шаг 3: Преобразуем base64 изображение в Uint8Array
+    const base64Image = resizedImage.base64;
+    const binaryString = atob(base64Image || '');
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    console.log(bytes.length, height * width);
+
+    // Шаг 4: Нормализуем пиксели и создаем тензор
+    for (let i = 0; i < height; i++) {
+        for (let j = 0; j < width; j++) {
+            const index = (i * width + j) * 4; // 4 - это RGBA
+            // Получаем значения R, G, B
+            // @ts-ignore
+            tensorData[0 * height * width + i * width + j] = (bytes[index] || 0) / 255; // R
+            // @ts-ignore
+            tensorData[1 * height * width + i * width + j] = (bytes[index + 1] || 0) / 255; // G
+            // @ts-ignore
+            tensorData[2 * height * width + i * width + j] = (bytes[index + 2] || 0) / 255; // B
         }
     }
 
     return tensorData;
 }
-
 
 export const floatTensorToImage = () => {}
 
