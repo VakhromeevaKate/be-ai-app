@@ -1,7 +1,7 @@
 import { Asset } from 'expo-asset';
 import * as ort from 'onnxruntime-react-native';
 import { InferenceSession } from "onnxruntime-react-native";
-import { imageToFloatTensor } from './onnx';
+import { imageToFloatTensor, imageToUin8Tensor } from './onnx';
 
 export async function loadModel() {
     let myModel: InferenceSession;
@@ -90,6 +90,7 @@ export async function runBeYoloModel(myModel: InferenceSession, imagePath: strin
         const inputData = await imageToFloatTensor(imagePath);
         const feeds:Record<string, ort.Tensor> = {};
         feeds[myModel.inputNames[0]] = new ort.Tensor(inputData, [1, 3, 640, 640]);
+        // console.log('input:', feeds[myModel.inputNames[0]]);
 
         const fetches = await myModel.run(feeds);
         const output = fetches[myModel.outputNames[0]];
