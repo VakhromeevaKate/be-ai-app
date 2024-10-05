@@ -93,15 +93,21 @@ export async function runBeYoloModel(myModel: InferenceSession, imagePath: strin
 
         const fetches = await myModel.run(feeds);
         const output = fetches[myModel.outputNames[0]];
-        const outputTensor = fetches.output
-        console.log({outputTensor})
+        // const output1 = fetches[myModel.outputNames[1]];
+        console.log(Object.keys(output))
+        console.log({
+            output: output.data.length,
+            cpuData: output.data[0],
+            dataLocation: output?.location,
+            type: output.type,
+            dims: output.dims,
+            size: output.size,
+        })
+
         if (!output) {
             console.log('failed to get output', `${myModel.outputNames[0]}`);
         } else {
             console.log('Be model inference successfully', `output shape: ${output.dims}`); //, output data: ${output.data}`);
-            console.log(Object.keys(fetches))
-            // const output1 = fetches[myModel.outputNames[1]];
-            // console.log(output1.data); // Тут везде NaN почему-то в дате, надо понять, что не так
         }
         return fetches;
     } catch (e) {

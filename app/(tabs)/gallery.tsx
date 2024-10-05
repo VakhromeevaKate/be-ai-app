@@ -103,9 +103,9 @@ export default function Gallery() {
       <ThemedView>
         {modelResult && <ThemedText>{i18n.t('Dairy')}: {0.0} %</ThemedText>}
         {modelResult && <ThemedText>{i18n.t('Fruits')}: {0.0} %</ThemedText>}
-        {modelResult && <ThemedText>{i18n.t('Grains')}: {0.0} %</ThemedText>}
-        {modelResult && <ThemedText>{i18n.t('Protein')}: {0.0} %</ThemedText>}
-        {modelResult && <ThemedText>{i18n.t('Vegetables')}: {100.0}%</ThemedText>}
+        {modelResult && <ThemedText>{i18n.t('Grains')}: {21.2} %</ThemedText>}
+        {modelResult && <ThemedText>{i18n.t('Protein')}: {73.1} %</ThemedText>}
+        {modelResult && <ThemedText>{i18n.t('Vegetables')}: {5.7}%</ThemedText>}
       </ThemedView>
     </>
   );
