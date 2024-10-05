@@ -88,11 +88,11 @@ export const imageToFloatTensor = async(imageUri: string, width: number = 640, h
             const index = (i * width + j) * 4; // 4 - это RGBA
             // Получаем значения R, G, B
             // @ts-ignore
-            tensorData[0 * height * width + i * width + j] = (bytesArr[index]) / 255; // R
+            tensorData[0 * height * width + i * width + j] = (bytesArr[index] || 0) / 255; // R
             // @ts-ignore
-            tensorData[1 * height * width + i * width + j] = (bytesArr[index + 1]) / 255; // G
+            tensorData[1 * height * width + i * width + j] = (bytesArr[index + 1] || 0) / 255; // G
             // @ts-ignore
-            tensorData[2 * height * width + i * width + j] = (bytesArr[index + 2]) / 255; // B
+            tensorData[2 * height * width + i * width + j] = (bytesArr[index + 2] || 0) / 255; // B
         }
     }
 

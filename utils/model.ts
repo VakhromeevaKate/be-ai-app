@@ -90,12 +90,12 @@ export async function runBeYoloModel(myModel: InferenceSession, imagePath: strin
         const inputData = await imageToFloatTensor(imagePath);
         const feeds:Record<string, ort.Tensor> = {};
         feeds[myModel.inputNames[0]] = new ort.Tensor(inputData, [1, 3, 640, 640]);
-        // console.log('input:', feeds[myModel.inputNames[0]]);
+        // console.log('myModel names:', myModel?.names);
+        // console.log('myModel metadata:', myModel?.names);
 
         const fetches = await myModel.run(feeds);
         const output = fetches[myModel.outputNames[0]];
-        // const output1 = fetches[myModel.outputNames[1]];
-        console.log(Object.keys(output))
+
         console.log({
             output: output.data.length,
             cpuData: output.data[0],
@@ -110,6 +110,9 @@ export async function runBeYoloModel(myModel: InferenceSession, imagePath: strin
         } else {
             console.log('Be model inference successfully', `output shape: ${output.dims}`); //, output data: ${output.data}`);
         }
+        console.log('fetches', Object.keys(fetches.output0))
+        console.log('fetches', Object.keys(fetches.output1))
+        console.log('fetches', fetches)
         return fetches;
     } catch (e) {
         console.log('failed to inference model', `${e}`);
