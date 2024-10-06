@@ -74,7 +74,7 @@ export default function Gallery() {
   }
 
   const renderContent = () => (
-    <>
+    <ThemedView style={styles.viewContainer}>
       {!image && <ThemedView style={styles.viewContainer}>
         <Pressable style={styles.commonButton} onPress={pickImage}>
           <ThemedText style={styles.buttonText}>{i18n.t('pickAnImage')}</ThemedText>
@@ -102,7 +102,7 @@ export default function Gallery() {
       <ThemedView>
         {modelResult && <ThemedText>{modelResult.dims}</ThemedText>}
       </ThemedView>
-    </>
+    </ThemedView>
   );
 
   return (
